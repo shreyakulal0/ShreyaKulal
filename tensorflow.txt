@@ -1,0 +1,33 @@
+import tensorflow as tf
+from keras.model import Sequenial
+from keras.layers import flatten,dense,dropout,Activation
+from keras.optimizer import adam
+
+minst=tf.keras.datasets.minst()
+(xtrain,ytrain),(xtest,ytest)=minst.load_data()
+xtrain,xtest=(xtrain/255.0,xtest/255.0)
+
+model=tf.keras.model.Sequential([tf.keras.layers.flatten(10,input_shape(28,28)),
+                                 tf.keras.layers.dense(10,activation='relu'),
+                                 tf.keras.layers.dropout(0.2),
+                                 tf.keras.layers.dense(10,activation='softmax')])
+                                                        
+model.compile(optimizer=SGD,loss='sparse categorical crossentropy',metrics=['accuracy'])
+tf_callbacks=tf.kerascallback.TensorBoard(log_dir='logs/fit',histogram_freq=1)
+history=model.fit(xtrain,ytrain,validation_data=(xtest,ytest),epoches=50,callbacks=tf_callback)
+
+%reload_ext tesorboard
+%tesorboard --logdir logs/fit
+
+import matplotlib.pyplot as plt
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.xlabel('epoches')
+plt.ylabel('accuracy')
+plt.legend(['train,test'],loc=upper_left)
+plt.show()
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.xlabel('epoches')
+plt.ylabel('accuracy')
+plt.show()
